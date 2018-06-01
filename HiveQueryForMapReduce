@@ -1,0 +1,20 @@
+1)	Reviews Table:
+
+-> Table Creation:
+- CREATE TABLE reviews ( userId INT, movieId INT, rating DOUBLE, timestamp BIGINT) row format 
+delimited fields terminated BY ',' tblproperties("skip.header.line.count"="1");
+-> Data Entry:
+- load data local inpath “dataset/reviews/reviews.csv" overwrite into table imdb_bigdata15.reviews;
+
+
+2)	Movies Table:
+-> Table Creation:
+- create table movies(moviesId INT, title STRING, genres STRING) ROW FORMAT SERDE 
+'org.apache.hadoop.hive.serde2.OpenCSVSerde' tblproperties("skip.header.line.count"="1");
+-> Data Entry:
+- load data local inpath "dataset/movies/movies.csv" overwrite into table imdb_bigdata15.movies;
+
+
+-> Query Implemented:----------------
+select count(movieid) as noOfReviews, movies.title from reviews,movies where movies.moviesid = reviews.movieid 
+group by movies.moviesid,movies.title order by noOfReviews asc;
